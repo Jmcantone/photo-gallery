@@ -7,6 +7,7 @@ import { CameraResultType, CameraSource, CameraPhoto, Capacitor, FilesystemDirec
 
 export function usePhotoGallery() {
 
+    const [photos, setPhotos] = useState<Photo[]>([]);
     const { getPhoto } = useCamera();
   
     const takePhoto = async () => {
@@ -15,9 +16,21 @@ export function usePhotoGallery() {
         source: CameraSource.Camera,
         quality: 100
       });
+      const fileName = new Date().getTime() + '.jpeg';
+        const newPhotos = [{
+        filepath: fileName,
+        webviewPath: cameraPhoto.webPath
+        }, ...photos];
+        setPhotos(newPhotos)
     };
   
     return {
+      photos,
       takePhoto
     };
   }
+
+  export interface Photo {
+    filepath: string;
+    webviewPath?: string;
+  } 
